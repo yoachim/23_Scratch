@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#SBATCH --partition=shared
+#SBATCH --partition=roma
 #
-#SBATCH --job-name=test
+#SBATCH --job-name=py_test
 #SBATCH --output=output-%j.txt
 #SBATCH --error=output-%j.txt
 #
