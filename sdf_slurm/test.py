@@ -1,5 +1,5 @@
 import numpy as np
-from rubin_sim.scheduler import ModelObservatory
+from rubin_sim.scheduler.model_observatory import ModelObservatory
 
 
 if __name__ == '__main__':
