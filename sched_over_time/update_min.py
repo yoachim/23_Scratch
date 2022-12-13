@@ -10,17 +10,19 @@ from astropy.time import Time
 
 def update_minion(outfile='minion_1016_update.db', 
                   in_db='minion_1016_sqlite.db',
-                  apply_weather=True, use_dithered=False):
+                  apply_weather=True, use_dithered=False,
+                  table='Summary',
+                  mjd_name='expMJD', exptime_name='visitExpTime'):
     """Let's update the minion_1016 runs to have the current sky, weather downtime, and throughputs.
     """
 
     conn = sqlite3.connect(in_db)
-    query = 'select * from Summary group by expMJD order by expMJD'
+    query = 'select * from %s group by %s order by %s' % (table, mjd_name, mjd_name)
     df = pd.read_sql(query, conn)
 
     num_obs = df['fieldRA'].size
 
-    mo = ModelObservatory(mjd_start=df['expMJD'].min())
+    mo = ModelObservatory(mjd_start=df[mjd_name].min())
     blank = empty_observation()
 
     observations = np.zeros(num_obs, dtype=blank.dtype)
@@ -30,16 +32,19 @@ def update_minion(outfile='minion_1016_update.db',
     else:
         observations['RA'] = df['fieldRA']
         observations['dec'] = df['fieldDec']
-    observations['mjd'] = df['expMJD']
+    observations['mjd'] = df[mjd_name]
     observations['filter'] = df['filter']
-    observations['exptime'] = df['visitExpTime']
+    observations['exptime'] = df[exptime_name]
     observations['nexp'] = 2
     observations['slewtime'] = df['slewTime']
     observations['alt'] = df['altitude']
     observations['az'] = df['azimuth']
     observations['rotSkyPos'] = df['rotSkyPos']
     observations['rotTelPos'] = df['rotTelPos']
-    observations['visittime'] = df['visitTime']
+    try:
+        observations['visittime'] = df['visitTime']
+    except:
+        observations['visittime'] = df[exptime_name] + 4
 
     obs_good = np.ones(num_obs, dtype=bool)
 
@@ -83,7 +88,11 @@ def update_minion(outfile='minion_1016_update.db',
 if __name__ == '__main__':
     #update_minion()
     #update_minion(outfile='minion_1016_newschema.db', apply_weather=True, use_dithered=False)
-    update_minion(in_db='baseline2018a.db',
-                  outfile='baseline2018a_newschema.db', 
-                  apply_weather=True, use_dithered=False)
     
+    #update_minion(in_db='baseline2018a.db',
+    #              outfile='baseline2018a_newschema.db', 
+    #              apply_weather=True, use_dithered=False,
+    #              table='SummaryAllProps', mjd_name='observationStartMJD',
+    #              exptime_name='visitExposureTime')
+    update_minion(outfile='opsim3_61_newschema.db', in_db='opsim3_61_sqlite.db',exptime_name='expTime')
+
