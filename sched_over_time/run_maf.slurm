@@ -55,19 +55,20 @@ cd /gscratch/scrubbed/yoachim/23_Scratch/sched_over_time
 ## run all the baseline commands in parallel
 module load parallel-20170722
 
+rm maf.sh
 
-ls *10yrs.db | xargs -I'{}' echo "glance_dir --db '{}'" > maf.sh
-ls *10yrs.db | xargs -I'{}' echo "scimaf_dir --db '{}'" >> maf.sh
-ls *10yrs.db | xargs -I'{}' echo "ddf_dir --db '{}'" >> maf.sh
-# ls *10yrs.db | xargs -I'{}' echo "metadata_dir --db '{}'" >> maf.sh
-
-ls *newschema.db | xargs -I'{}' echo "glance_dir --db '{}'" >> new_maf.sh
-ls *newschema.db | xargs -I'{}' echo "scimaf_dir --db '{}'" >> new_maf.sh
-ls *newschema.db | xargs -I'{}' echo "ddf_dir --db '{}'" >> new_maf.sh
+#ls *10yrs.db | xargs -I'{}' echo "glance_dir --db '{}'" > maf.sh
+#ls *10yrs.db | xargs -I'{}' echo "scimaf_dir --db '{}'" >> maf.sh
+#ls *10yrs.db | xargs -I'{}' echo "ddf_dir --db '{}'" >> maf.sh
 
 
-generate_ss 
-cat ss_script.sh >> maf.sh
+#ls *newschema.db | xargs -I'{}' echo "glance_dir --db '{}'" >> new_maf.sh
+#ls *newschema.db | xargs -I'{}' echo "scimaf_dir --db '{}'" >> new_maf.sh
+#ls *newschema.db | xargs -I'{}' echo "ddf_dir --db '{}'" >> new_maf.sh
+
+
+#generate_ss 
+#cat ss_script.sh >> maf.sh
 generate_ss --pop vatiras_granvik_10k
 cat ss_script.sh >> maf.sh
 
