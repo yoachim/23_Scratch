@@ -11,8 +11,10 @@ if __name__ == '__main__':
 
     filename = 'time_test.db'
 
+    survey_length = 3653
+
     mo = ModelObservatory(mjd_start=mjd_start)
-    mo, scheduler, observations = sim_runner(mo, scheduler, survey_length=100.0,
+    mo, scheduler, observations = sim_runner(mo, scheduler, survey_length=survey_length,
                                              verbose=True, filename=filename)
     sched2 = example_scheduler(mjd_start=mjd_start)
     mo = ModelObservatory(mjd_start=mjd_start)
@@ -23,3 +25,6 @@ if __name__ == '__main__':
 
     dt = (t2-t1)/60.
     print('Time to restore=%f min' % dt)
+
+
+# 100 days took 2.03 min to restore. So restore a pickle and catch up for a week should be ~10s. If there are daily cehckpoints, ~1.2s
