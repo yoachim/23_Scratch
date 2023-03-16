@@ -10,6 +10,10 @@ import copy
 # restore scheduler to point right before divergence. Add in observations that haven't been recorded. 
 # Sim rest of night again.
 
+# I think we can't assume we have good Q/A on visits during night. So when inturrupted, let's assume things before that
+# went accourding to plan. If they didn't, we'll get a proper update the next night with a scheduler constructed with
+# only observations we know are good.
+
 class NightSimulator(object):
     """Simulate a night
 
