@@ -42,10 +42,10 @@ if __name__ == "__main__":
 
     numpy_visits = np.array_split(numpy_visits, args.n_blocks)[args.i]
 
-    streak_lengths, n_streaks = const.check_pointings(visits["fieldRA"].values,
-                                                      visits["fieldDec"].values,
-                                                      visits["observationStartMJD"].values,
-                                                      visit_time=visits["visitExposureTime"].values+2.*(visits["numExposures"]-1))
+    streak_lengths, n_streaks = const.check_pointings(numpy_visits["fieldRA"],
+                                                      numpy_visits["fieldDec"],
+                                                      numpy_visits["observationStartMJD"],
+                                                      visit_time=numpy_visits["visitExposureTime"]+2.*(numpy_visits["numExposures"]-1))
     np.savez(save_file, streak_lengths=streak_lengths, n_streaks=n_streaks)
 
 

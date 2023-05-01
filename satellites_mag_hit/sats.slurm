@@ -57,4 +57,4 @@ module load parallel-20170722
 
 seq 0 199 | xargs -I'{}' echo "python standard_stat.py --i {}" > commands.sh
 
-cat commands.sh | parallel -j 7
+cat commands.sh | parallel -j 20
