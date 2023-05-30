@@ -28,5 +28,5 @@ if __name__ == "__main__":
         sys.stdout.write(text)
         sys.stdout.flush()
 
-    stars = np.concatenate(results)
+    stars = pd.concat(results)
     stars.to_hdf('%s_stars.h5' % filtername)
