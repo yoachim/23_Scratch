@@ -12,6 +12,7 @@ if __name__ == "__main__":
     results = []
 
     filtername = 'r'
+    print("npix=", n_pix)
 
     for i in np.arange(n_pix):
         result = qc.query(sql='SELECT ra,dec,umag,gmag,rmag,imag,zmag,ymag,ring256 FROM lsst_sim.simdr2 WHERE %smag > 17 and %smag < 17.5 and ring256=%i LIMIT 10;' % (filtername, filtername, i))
@@ -24,7 +25,7 @@ if __name__ == "__main__":
             results.append(df)
 
         progress = float(i) / n_pix * 100
-        text = "\rprogress = %.2f%%" % progress
+        text = "\rprogress = %.2f%%, %i" % (progress, i)
         sys.stdout.write(text)
         sys.stdout.flush()
 
