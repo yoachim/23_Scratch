@@ -17,9 +17,9 @@ if __name__ == "__main__":
     for i in np.arange(n_pix):
         result = qc.query(sql='SELECT ra,dec,umag,gmag,rmag,imag,zmag,ymag,ring256 FROM lsst_sim.simdr2 WHERE %smag > 17 and %smag < 17.5 and ring256=%i LIMIT 10;' % (filtername, filtername, i))
         df = pd.read_csv(io.StringIO(result))
-        if df.shape[0] < n_keep:
-            result = qc.query(sql='SELECT ra,dec,umag,gmag,rmag,imag,zmag,ymag,ring256 FROM lsst_sim.simdr2 WHERE %smag > 17 and %smag < 18 and ring256=%i LIMIT 10;' % (filtername, filtername, i))
-            df = pd.read_csv(io.StringIO(result))
+        #if df.shape[0] < n_keep:
+        #    result = qc.query(sql='SELECT ra,dec,umag,gmag,rmag,imag,zmag,ymag,ring256 FROM lsst_sim.simdr2 WHERE %smag > 17 and %smag < 18 and ring256=%i LIMIT 10;' % (filtername, filtername, i))
+        #    df = pd.read_csv(io.StringIO(result))
         if df.shape[0] > 0:
             df = df.sort_values('rmag')[0:n_keep]
             results.append(df)
