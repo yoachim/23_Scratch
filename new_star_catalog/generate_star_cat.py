@@ -4,8 +4,15 @@ import healpy as hp
 import pandas as pd
 import io
 import sys
+import argparse
+
 
 if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--block", type=int, default=0)
+    args = parser.parse_args()
+    n_split = 20
 
     n_keep = 2
     n_pix = hp.nside2npix(256)
@@ -14,7 +21,9 @@ if __name__ == "__main__":
     filtername = 'r'
     print("npix=", n_pix)
 
-    for i in np.arange(n_pix):
+    indx = np.array_split(np.arange(n_pix), n_split)[args.block]
+
+    for i in indx:
         result = qc.query(sql='SELECT ra,dec,umag,gmag,rmag,imag,zmag,ymag,ring256 FROM lsst_sim.simdr2 WHERE %smag > 17 and %smag < 17.5 and ring256=%i LIMIT 10;' % (filtername, filtername, i))
         df = pd.read_csv(io.StringIO(result))
         #if df.shape[0] < n_keep:
@@ -30,4 +39,4 @@ if __name__ == "__main__":
         sys.stdout.flush()
 
     stars = pd.concat(results)
-    stars.to_hdf('%s_stars.h5' % filtername)
+    stars.to_hdf('%s_stars_block_%i.h5' % (filtername, args.block))
