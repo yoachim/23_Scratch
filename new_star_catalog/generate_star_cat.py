@@ -38,5 +38,9 @@ if __name__ == "__main__":
         sys.stdout.write(text)
         sys.stdout.flush()
 
-    stars = pd.concat(results)
-    stars.to_hdf('%s_stars_block_%i.h5' % (filtername, args.block))
+    if len(results) > 0:
+        stars = pd.concat(results)
+        stars.to_hdf('%s_stars_block_%i.h5' % (filtername, args.block))
+    else:
+        with open('%s_stars_block_%i.txt' % (filtername, args.block), 'w') as f:
+            print("no results", file=f)
