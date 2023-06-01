@@ -5,6 +5,7 @@ import pandas as pd
 import io
 import sys
 import argparse
+import time
 
 
 if __name__ == "__main__":
@@ -24,7 +25,12 @@ if __name__ == "__main__":
     indx = np.array_split(np.arange(n_pix), n_split)[args.block]
 
     for i in indx:
-        result = qc.query(sql='SELECT ra,dec,umag,gmag,rmag,imag,zmag,ymag,ring256 FROM lsst_sim.simdr2 WHERE %smag > 17 and %smag < 17.5 and ring256=%i LIMIT 10;' % (filtername, filtername, i))
+        try:
+            result = qc.query(sql='SELECT ra,dec,umag,gmag,rmag,imag,zmag,ymag,ring256 FROM lsst_sim.simdr2 WHERE %smag > 17 and %smag < 17.5 and ring256=%i LIMIT 10;' % (filtername, filtername, i))
+        except:
+            # getting weird "502 Bad Gateway" error, let's just throw in a pause 
+            time.sleep(5.)
+            result = qc.query(sql='SELECT ra,dec,umag,gmag,rmag,imag,zmag,ymag,ring256 FROM lsst_sim.simdr2 WHERE %smag > 17 and %smag < 17.5 and ring256=%i LIMIT 10;' % (filtername, filtername, i))
         df = pd.read_csv(io.StringIO(result))
         #if df.shape[0] < n_keep:
         #    result = qc.query(sql='SELECT ra,dec,umag,gmag,rmag,imag,zmag,ymag,ring256 FROM lsst_sim.simdr2 WHERE %smag > 17 and %smag < 18 and ring256=%i LIMIT 10;' % (filtername, filtername, i))
