@@ -9,6 +9,9 @@ def jerk_time(distance, v_max, acc_max, jerk_max):
     modified from https://github.com/mdhom/py_constant_jerk/blob/main/constantJerk.py
     """
 
+    # If distance is a scalar, convert to array.
+    distance = np.atleast_1d(distance)
+
     # If there is no jerk, fall back on infinite jerk approximation
     if jerk_max is None:
         return acc_time(distance, v_max, acc_max)
@@ -46,6 +49,9 @@ def jerk_time(distance, v_max, acc_max, jerk_max):
 
 def acc_time(distance, v_max, acc_max):
     """Time to move given a maximum velocity and acceleration. Assumes infinite jerk."""
+
+    distance = np.atleast_1d(distance)
+
     dm = v_max**2 / acc_max
     slew_time = np.where(
         distance < dm,
